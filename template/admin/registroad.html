@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Registro empleados {% endblock %}
+
+{% block content %}
+    <form action="/formulario" method="post">
+
+        <input type="text" name="name" placeholder="Escriba su Nombre">
+        <br>
+        <input type="password" name="pass1" placeholder="Escriba su contraseña">
+        <br>
+        <input type="password" name="pass2" placeholder="Confirme su contraseña">
+        <br>
+        <input type="submit" name="Enviar">
+    </form>
+{% endblock %}

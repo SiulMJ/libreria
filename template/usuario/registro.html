@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Registro {% endblock %}
+
+{% block content %}
+    <form action="/formulario" method="post">
+
+        <input type="email" name="email" placeholder="Escriba su correo">
+        <br>
+        <input type="password" name="pass1" placeholder="Escriba su contraseña">
+        <br>
+        <input type="password" name="pass2" placeholder="Confirme su contraseña">
+        <br>
+        <input type="submit" name="Enviar">    
+    </form>
+{% endblock %}
