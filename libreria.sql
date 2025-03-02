@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 01-03-2025 a las 06:41:37
+-- Servidor: localhost
+-- Tiempo de generación: 02-03-2025 a las 19:37:07
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -42,7 +42,8 @@ CREATE TABLE `autor` (
 
 CREATE TABLE `cartas` (
   `id_cartas` int(11) NOT NULL,
-  `id_tcarta` int(11) NOT NULL
+  `id_tcarta` int(11) NOT NULL,
+  `imagen` varchar(35) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -79,7 +80,8 @@ CREATE TABLE `libros` (
   `id_libros` int(11) NOT NULL,
   `id_autor` int(11) NOT NULL,
   `id_genero` int(11) NOT NULL,
-  `isbn` varchar(30) DEFAULT NULL
+  `isbn` varchar(30) DEFAULT NULL,
+  `imagen` varchar(35) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -90,8 +92,9 @@ CREATE TABLE `libros` (
 
 CREATE TABLE `producto` (
   `id_producto` int(11) NOT NULL,
-  `id_tproducto` int(11) NOT NULL,
   `id_trabajadores` int(11) NOT NULL,
+  `id_libros` int(11) NOT NULL,
+  `id_cartas` int(11) NOT NULL,
   `nombre` varchar(25) DEFAULT NULL,
   `cantidad` varchar(25) DEFAULT NULL,
   `precio` varchar(25) DEFAULT NULL
@@ -118,18 +121,6 @@ CREATE TABLE `tcarta` (
   `id_tcarta` int(11) NOT NULL,
   `nombre` varchar(25) DEFAULT NULL,
   `edicion` varchar(25) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tproctuto`
---
-
-CREATE TABLE `tproctuto` (
-  `id_tproducto` int(11) NOT NULL,
-  `id_libros` int(11) NOT NULL,
-  `id_carta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -217,8 +208,9 @@ ALTER TABLE `libros`
 --
 ALTER TABLE `producto`
   ADD PRIMARY KEY (`id_producto`),
-  ADD KEY `id_tproducto` (`id_tproducto`),
-  ADD KEY `id_trabajadores` (`id_trabajadores`);
+  ADD KEY `id_trabajadores` (`id_trabajadores`),
+  ADD KEY `id_libros` (`id_libros`,`id_cartas`),
+  ADD KEY `id_cartas` (`id_cartas`);
 
 --
 -- Indices de la tabla `rol`
@@ -231,14 +223,6 @@ ALTER TABLE `rol`
 --
 ALTER TABLE `tcarta`
   ADD PRIMARY KEY (`id_tcarta`);
-
---
--- Indices de la tabla `tproctuto`
---
-ALTER TABLE `tproctuto`
-  ADD PRIMARY KEY (`id_tproducto`),
-  ADD KEY `id_libros` (`id_libros`),
-  ADD KEY `id_carta` (`id_carta`);
 
 --
 -- Indices de la tabla `trabajadores`
@@ -314,12 +298,6 @@ ALTER TABLE `tcarta`
   MODIFY `id_tcarta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `tproctuto`
---
-ALTER TABLE `tproctuto`
-  MODIFY `id_tproducto` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `trabajadores`
 --
 ALTER TABLE `trabajadores`
@@ -366,15 +344,9 @@ ALTER TABLE `libros`
 -- Filtros para la tabla `producto`
 --
 ALTER TABLE `producto`
-  ADD CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`id_tproducto`) REFERENCES `tproctuto` (`id_tproducto`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `producto_ibfk_2` FOREIGN KEY (`id_trabajadores`) REFERENCES `trabajadores` (`id_trabajadores`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `tproctuto`
---
-ALTER TABLE `tproctuto`
-  ADD CONSTRAINT `tproctuto_ibfk_1` FOREIGN KEY (`id_libros`) REFERENCES `libros` (`id_libros`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tproctuto_ibfk_2` FOREIGN KEY (`id_carta`) REFERENCES `cartas` (`id_cartas`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `producto_ibfk_2` FOREIGN KEY (`id_trabajadores`) REFERENCES `trabajadores` (`id_trabajadores`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `producto_ibfk_3` FOREIGN KEY (`id_libros`) REFERENCES `libros` (`id_libros`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `producto_ibfk_4` FOREIGN KEY (`id_cartas`) REFERENCES `cartas` (`id_cartas`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `trabajadores`
